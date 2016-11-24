@@ -31,6 +31,7 @@
     <script src="lib/angular-pdf/dist/angular-pdf.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -45,6 +46,7 @@
       </ion-header-bar>
       <ion-content ng-controller="DocumentController as vm" class="padding">
         <p><button ng-click="vm.createInvoice()" class="button icon-left ion-play button-assertive">Create Invoice</button></p>
+
       </ion-content>
     </ion-pane>
 </body>
@@ -58,5 +60,5 @@
         <ng-pdf ng-if="pdfUrl" template-url="partials/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
     </ion-content>
     </ion-modal-view>
-</script> 
+</script>
 </html>

@@ -1,6 +1,6 @@
-angular.module('starter').controller('DocumentController', ['$scope', '$ionicModal', 'InvoiceService', DocumentController]);
+angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile', 'InvoiceService', DocumentController]);
 
-function DocumentController($scope, $ionicModal, InvoiceService) {
+function DocumentController($scope, $ionicModal,$cordovaFile, InvoiceService) {
     var vm = this;
 
     setDefaultsForPdfViewer($scope);
@@ -18,19 +18,21 @@ function DocumentController($scope, $ionicModal, InvoiceService) {
 
         InvoiceService.createPdf(invoice)
                         .then(function(pdf) {
-                            var blob = new Blob([pdf], {type: 'application/pdf'});
+                            var blob = new Blob([pdf[0]], {type: 'application/pdf'});
                             $scope.pdfUrl = URL.createObjectURL(blob);
-
+                            $scope.fileUrl = pdf[1]+"conta.pdf";
                             // Display the modal view
                             vm.modal.show();
                         });
     };
-
+    vm.download = function() {
+      // console.log($scope.fileUrl);
+      // window.open($scope.fileUrl,'_system');
+    }
     // Clean up the modal view.
     $scope.$on('$destroy', function () {
         vm.modal.remove();
     });
-
     return vm;
 }
 
