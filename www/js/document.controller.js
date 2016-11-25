@@ -34,16 +34,13 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$ionicLoading, Invo
       var blob = new Blob([pdf[0]], {type: 'application/pdf'});
       $scope.pdfUrl = URL.createObjectURL(blob);
       $scope.fileUrl = pdf[1]+"conta.pdf";
+      console.log($scope.fileUrl);
       callback();
     });
 
 
 
   };
-  vm.download = function() {
-    // console.log($scope.fileUrl);
-    // window.open($scope.fileUrl,'_system');
-  }
   // Clean up the modal view.
   $scope.$on('$destroy', function () {
     vm.modal.remove();
