@@ -1,6 +1,6 @@
-angular.module('starter').factory('InvoiceService', ['$q', '$cordovaFile',InvoiceService]);
+angular.module('starter').factory('InvoiceService', ['$q', '$cordovaFile', '$ionicPlatform', InvoiceService]);
 
-function InvoiceService($q,$cordovaFile) {
+function InvoiceService($q,$cordovaFile, $ionicPlatform) {
   function createPdf(invoice) {
     return $q(function(resolve, reject) {
       var dd = createDocumentDefinition(invoice);
@@ -8,17 +8,23 @@ function InvoiceService($q,$cordovaFile) {
       pdf.getBuffer(function (buffer) {
         var utf8 = new Uint8Array(buffer); // Convert to UTF-8...
         binaryArray = utf8.buffer; // Convert to Binary...
-        $cordovaFile.writeFile(cordova.file.externalApplicationStorageDirectory, "conta.pdf", binaryArray, true)
+        var directory;
+        if(ionic.Platform.isIOS() == true){
+           directory = cordova.file.documentsDirectory;
+        }else{
+           directory = cordova.file.externalApplicationStorageDirectory;
+        }
+        $cordovaFile.writeFile(directory, "conta.pdf", binaryArray, true)
         .then(function (success) {
           console.log("Criou o arquivo pdf");
-          console.log(cordova.file.externalApplicationStorageDirectory);
+          console.log(directory);
         }, function (error) {
           console.log("Não criou o arquivo pdf");
           console.log("error");
         });
       });
       pdf.getBase64(function (output) {
-        resolve([base64ToUint8Array(output),cordova.file.externalApplicationStorageDirectory]);
+        resolve([base64ToUint8Array(output),directory]);
       });
     });
   }
