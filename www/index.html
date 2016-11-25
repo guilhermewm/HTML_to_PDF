@@ -46,6 +46,7 @@
       </ion-header-bar>
       <ion-content ng-controller="DocumentController as vm" class="padding">
         <p><button ng-click="vm.createInvoice()" class="button icon-left ion-play button-assertive">Create Invoice</button></p>
+        <a  ng-href="{{fileUrl}}" onclick="window.open(this.href, '_system','location=yes'); return false;"><button class="button icon-left ion-play button-assertive">download</button></a>
 
       </ion-content>
     </ion-pane>
@@ -58,6 +59,7 @@
     </ion-header-bar>
     <ion-content>
         <ng-pdf ng-if="pdfUrl" template-url="partials/viewer.html" canvasid="pdf" scale="page-fit"></ng-pdf>
+
     </ion-content>
     </ion-modal-view>
 </script>

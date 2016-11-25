@@ -10,8 +10,10 @@ function InvoiceService($q,$cordovaFile) {
         binaryArray = utf8.buffer; // Convert to Binary...
         $cordovaFile.writeFile(cordova.file.externalApplicationStorageDirectory, "conta.pdf", binaryArray, true)
         .then(function (success) {
+          console.log("Criou o arquivo pdf");
           console.log(cordova.file.externalApplicationStorageDirectory);
         }, function (error) {
+          console.log("Não criou o arquivo pdf");
           console.log("error");
         });
       });
