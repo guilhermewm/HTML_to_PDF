@@ -1,6 +1,6 @@
-angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile', '$ionicLoading', 'InvoiceService', DocumentController]);
+angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile','$cordovaFileOpener2', '$ionicLoading', 'InvoiceService', DocumentController]);
 
-function DocumentController($scope, $ionicModal,$cordovaFile,$ionicLoading, InvoiceService) {
+function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$ionicLoading, InvoiceService) {
   var vm = this;
 
   setDefaultsForPdfViewer($scope);
@@ -28,8 +28,8 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$ionicLoading, Invo
     callback = function(){
       $scope.hide();
 
-      window.open($scope.fileUrl, '_blank','location=yes'); return false;
-      //window.open($scope.fileUrl, '_system'); return false;
+      //window.open($scope.fileUrl, '_blank','location=no'); return false;
+      $cordovaFileOpener2.open($scope.fileUrl,'application/pdf');
 
     }
     InvoiceService.createPdf(invoice)
