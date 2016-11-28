@@ -29,7 +29,8 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$ionicLoading, Invo
       $scope.hide();
 
       //window.open($scope.fileUrl, '_blank','location=yes'); return false;
-      window.open($scope.fileUrl, '_system'); return false;
+      //window.open($scope.fileUrl, '_system'); return false;
+      window.open($scope.fileUrl, '_self'); return false;
 
     }
     InvoiceService.createPdf(invoice)
