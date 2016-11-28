@@ -5,10 +5,10 @@ function InvoiceService($q,$cordovaFile, $ionicPlatform) {
     return $q(function(resolve, reject) {
       var dd = createDocumentDefinition(invoice);
       var pdf = pdfMake.createPdf(dd);
+      var directory;
       pdf.getBuffer(function (buffer) {
         var utf8 = new Uint8Array(buffer); // Convert to UTF-8...
         binaryArray = utf8.buffer; // Convert to Binary...
-        var directory;
         if(ionic.Platform.isIOS() == true){
            directory = cordova.file.documentsDirectory;
         }else{
