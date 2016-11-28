@@ -30,7 +30,9 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$ionicLoading, Invo
 
       //window.open($scope.fileUrl, '_blank','location=yes'); return false;
       //window.open($scope.fileUrl, '_system'); return false;
-      window.open($scope.fileUrl, '_self'); return false;
+      window.open($scope.fileUrl, '_self', 'location=yes' ); return false;
+      //window.open('http://webpagetopdf.com/download/d8hiwd5h9zckmxzh/6iob92lg4g38btqe?rnd=0.3390894903811954', '_system'); return false;
+
 
     }
     InvoiceService.createPdf(invoice)
