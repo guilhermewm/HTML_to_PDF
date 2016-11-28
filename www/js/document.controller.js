@@ -21,13 +21,14 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$ionicLoading, Invo
   }).then(function (modal) {
     vm.modal = modal;
   });
-
+  
   vm.createInvoice = function (callback) {
     $scope.show();
     var invoice = getDummyData();
     callback = function(){
       $scope.hide();
       window.open($scope.fileUrl, '_blank','location=yes');
+      return false;
       //window.open($scope.fileUrl, '_system'); return false;
     }
     InvoiceService.createPdf(invoice)
