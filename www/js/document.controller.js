@@ -1,6 +1,6 @@
-angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile','$cordovaFileOpener2','$cordovaInAppBrowser', '$ionicLoading', 'InvoiceService', DocumentController]);
+angular.module('starter').controller('DocumentController', ['$scope','$rootScope','$ionicModal','$cordovaFile','$cordovaFileOpener2','$cordovaInAppBrowser', '$ionicLoading', 'InvoiceService', DocumentController]);
 
-function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$cordovaInAppBrowser,$ionicLoading, InvoiceService) {
+function DocumentController($scope, $rootScope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$cordovaInAppBrowser,$ionicLoading, InvoiceService) {
   var vm = this;
 
   setDefaultsForPdfViewer($scope);
@@ -21,12 +21,34 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2
   }).then(function (modal) {
     vm.modal = modal;
   });
+
+
   vm.openExternalLink = function() {
-    var ref = cordova.InAppBrowser.open('http://s2.corsan.rs.gov.br/', '_self', 'location=yes');
-    ref.addEventListener('loadstop', function() {
-      ref.insertCSS({code : "body{background:#f1f !important}"});
-    });
+
+var options = {
+          location: 'yes',
+          zoom: 'no'
+       };
+    $cordovaInAppBrowser.open('http://s2.corsan.rs.gov.br/', '_blank', options)
+                   .then(function(event) {
+                     // success
+                   })
+                   .catch(function(event) {
+                     // error
+                 });
+
+    // var ref = $cordovaInAppBrowser.open('http://s2.corsan.rs.gov.br/', '_blank', 'location=yes, zoom=no, hidden=yes');
+    // ref.addEventListener('loadstop', function() {
+    //   ref.insertCSS({code : "body{padding:10px !important; display: block;} "});
+    // });
   };
+
+   $rootScope.$on('$cordovaInAppBrowser:loadstop', function(e, event){
+      // insert CSS via code / file
+      $cordovaInAppBrowser.insertCSS({
+       code : 'body{padding:10px !important; display: block;}'
+      });
+   });
   vm.createInvoice = function (callback) {
     $scope.show();
     var invoice = getDummyData();
