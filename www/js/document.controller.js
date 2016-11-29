@@ -1,6 +1,6 @@
-angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile','$cordovaFileOpener2', '$ionicLoading', 'InvoiceService', DocumentController]);
+angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile','$cordovaFileOpener2','$cordovaInAppBrowser', '$ionicLoading', 'InvoiceService', DocumentController]);
 
-function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$ionicLoading, InvoiceService) {
+function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$cordovaInAppBrowser,$ionicLoading, InvoiceService) {
   var vm = this;
 
   setDefaultsForPdfViewer($scope);
@@ -21,23 +21,28 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2
   }).then(function (modal) {
     vm.modal = modal;
   });
-
+  vm.openExternalLink = function() {
+    var ref = cordova.InAppBrowser.open('http://s2.corsan.rs.gov.br/', '_self', 'location=yes');
+    ref.addEventListener('loadstop', function() {
+      ref.insertCSS({code : "body{background:#f1f !important}"});
+    });
+  };
   vm.createInvoice = function (callback) {
     $scope.show();
     var invoice = getDummyData();
     callback = function(){
       $scope.hide();
 
-// <<<<<<< HEAD
+      // <<<<<<< HEAD
       //window.open($scope.fileUrl, '_blank','location=no'); return false;
       $cordovaFileOpener2.open($scope.fileUrl,'application/pdf');
-// =======
-//       //window.open($scope.fileUrl, '_blank','location=yes'); return false;
-//       //window.open($scope.fileUrl, '_system'); return false;
-//       window.open($scope.fileUrl, '_self', 'location=yes' ); return false;
-//       //window.open('http://webpagetopdf.com/download/d8hiwd5h9zckmxzh/6iob92lg4g38btqe?rnd=0.3390894903811954', '_system'); return false;
-//
-// >>>>>>> 8b76ab14412d04ca57f0734f64145c64aa32f135
+      // =======
+      //       //window.open($scope.fileUrl, '_blank','location=yes'); return false;
+      //       //window.open($scope.fileUrl, '_system'); return false;
+      //       window.open($scope.fileUrl, '_self', 'location=yes' ); return false;
+      //       //window.open('http://webpagetopdf.com/download/d8hiwd5h9zckmxzh/6iob92lg4g38btqe?rnd=0.3390894903811954', '_system'); return false;
+      //
+      // >>>>>>> 8b76ab14412d04ca57f0734f64145c64aa32f135
 
     }
     InvoiceService.createPdf(invoice)
