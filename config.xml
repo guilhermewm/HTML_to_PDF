@@ -45,5 +45,6 @@
     <plugin name="cordova-plugin-file" spec="~4.1.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0" />
     <plugin name="cordova-plugin-file-opener2" spec="~2.0.3" />
-    <allow-navigation href="*"/>
+    <allow-navigation href="*" />
+    <plugin name="cordova-plugin-crypt-file" spec="~0.0.1" />
 </widget>
