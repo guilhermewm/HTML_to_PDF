@@ -1,6 +1,6 @@
-angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile','$cordovaFileOpener2','$cordovaInAppBrowser', '$ionicLoading', 'InvoiceService', DocumentController]);
+angular.module('starter').controller('DocumentController', ['$scope','$ionicModal','$cordovaFile','$cordovaFileOpener2', '$ionicLoading', 'InvoiceService', DocumentController]);
 
-function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$cordovaInAppBrowser,$ionicLoading, InvoiceService) {
+function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2,$ionicLoading, InvoiceService) {
   var vm = this;
 
   setDefaultsForPdfViewer($scope);
@@ -21,47 +21,64 @@ function DocumentController($scope, $ionicModal,$cordovaFile,$cordovaFileOpener2
   }).then(function (modal) {
     vm.modal = modal;
   });
+
   vm.openExternalLink = function() {
     var ref = cordova.InAppBrowser.open('http://s2.corsan.rs.gov.br/', '_self', 'location=yes');
     ref.addEventListener('loadstop', function() {
       ref.insertCSS({code : "body{background:#f1f !important}"});
+      ref.executeScript({ code: "var teste = document.querySelector('.btn.btn-default'); teste.onclick = function(){ if (teste.value == 'Enviar'){localStorage.setItem( 'Log', 'login' );}}" });
+      var loop = setInterval(function() {
+        ref.executeScript({
+          code: "localStorage.getItem( 'Log' );"
+        },
+        function( values ) {
+          var name = values[ 0 ];
+          if ( name ) {
+            clearInterval(loop);
+            ref.executeScript({code:"localStorage.removeItem('Log');"});
+            ref.close();
+          }
+        }
+      );
     });
-  };
-  vm.createInvoice = function (callback) {
-    $scope.show();
-    var invoice = getDummyData();
-    callback = function(){
-      $scope.hide();
-
-      // <<<<<<< HEAD
-      //window.open($scope.fileUrl, '_blank','location=no'); return false;
-      $cordovaFileOpener2.open($scope.fileUrl,'application/pdf');
-      // =======
-      //       //window.open($scope.fileUrl, '_blank','location=yes'); return false;
-      //       //window.open($scope.fileUrl, '_system'); return false;
-      //       window.open($scope.fileUrl, '_self', 'location=yes' ); return false;
-      //       //window.open('http://webpagetopdf.com/download/d8hiwd5h9zckmxzh/6iob92lg4g38btqe?rnd=0.3390894903811954', '_system'); return false;
-      //
-      // >>>>>>> 8b76ab14412d04ca57f0734f64145c64aa32f135
-
-    }
-    InvoiceService.createPdf(invoice)
-    .then(function(pdf) {
-      var blob = new Blob([pdf[0]], {type: 'application/pdf'});
-      $scope.pdfUrl = URL.createObjectURL(blob);
-      $scope.fileUrl = pdf[1]+"conta.pdf";
-      console.log($scope.fileUrl);
-      callback();
-    });
-
-
-
-  };
-  // Clean up the modal view.
-  $scope.$on('$destroy', function () {
-    vm.modal.remove();
   });
-  return vm;
+};
+
+vm.createInvoice = function (callback) {
+  $scope.show();
+  var invoice = getDummyData();
+  callback = function(){
+    $scope.hide();
+
+    // <<<<<<< HEAD
+    //window.open($scope.fileUrl, '_blank','location=no'); return false;
+    $cordovaFileOpener2.open($scope.fileUrl,'application/pdf');
+    // =======
+    //       //window.open($scope.fileUrl, '_blank','location=yes'); return false;
+    //       //window.open($scope.fileUrl, '_system'); return false;
+    //       window.open($scope.fileUrl, '_self', 'location=yes' ); return false;
+    //       //window.open('http://webpagetopdf.com/download/d8hiwd5h9zckmxzh/6iob92lg4g38btqe?rnd=0.3390894903811954', '_system'); return false;
+    //
+    // >>>>>>> 8b76ab14412d04ca57f0734f64145c64aa32f135
+
+  }
+  InvoiceService.createPdf(invoice)
+  .then(function(pdf) {
+    var blob = new Blob([pdf[0]], {type: 'application/pdf'});
+    $scope.pdfUrl = URL.createObjectURL(blob);
+    $scope.fileUrl = pdf[1]+"conta.pdf";
+    console.log($scope.fileUrl);
+    callback();
+  });
+
+
+
+};
+// Clean up the modal view.
+$scope.$on('$destroy', function () {
+  vm.modal.remove();
+});
+return vm;
 }
 
 function setDefaultsForPdfViewer($scope) {
